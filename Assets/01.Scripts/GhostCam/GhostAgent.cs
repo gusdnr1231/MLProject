@@ -9,16 +9,19 @@ public class GhostAgent : Agent
 {
 	private Rigidbody ghostRB;
 	private Animator ghostAnim;
+	private GhostCamMain gcMain;
 
 	public float moveSpeed;
 	public float turnSpeed;
 	public float attackTime;
+	public bool isEnemy;
 	private bool CanAttack = true;
 
 	public override void Initialize()
 	{
 		ghostRB = GetComponent<Rigidbody>();
 		ghostAnim = transform.Find("Visual").GetComponent<Animator>();
+		gcMain = transform.parent.GetComponent<GhostCamMain>();
 	}
 
 	public override void OnEpisodeBegin()
@@ -30,7 +33,7 @@ public class GhostAgent : Agent
 
 	public override void CollectObservations(VectorSensor sensor)
 	{
-
+		sensor.AddObservation(isEnemy ? gcMain.ECount : gcMain.PCount);
 	}
 
 	public override void OnActionReceived(ActionBuffers actions)
@@ -56,6 +59,13 @@ public class GhostAgent : Agent
 
 		ghostRB.MovePosition(transform.position + direction * moveSpeed * Time.fixedDeltaTime);
 		transform.Rotate(rotationAxis, turnSpeed * Time.fixedDeltaTime);
+
+		if((isEnemy ? gcMain.ECount : gcMain.PCount) > (isEnemy ? gcMain.PCount : gcMain.ECount))
+		{
+			//AddReward(0.5f);
+		}
+
+		//AddReward(-1f / MaxStep);
 	}
 
 	public override void Heuristic(in ActionBuffers actionsOut)
@@ -82,7 +92,14 @@ public class GhostAgent : Agent
 
 	private void OnCollisionEnter(Collision collision)
 	{
-		
+		if (collision.gameObject.CompareTag("STAGE"))
+			Debug.Log("In Stage");
+	}
+	
+	private void OnCollisionExit(Collision collision)
+	{
+		if (collision.gameObject.CompareTag("STAGE"))
+			Debug.Log("Out Stage");
 	}
 
 }

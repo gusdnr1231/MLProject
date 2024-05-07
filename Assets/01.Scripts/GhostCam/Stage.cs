@@ -7,7 +7,7 @@ public class Stage : MonoBehaviour
 	public int P_GhostCount { get; set; } = 0;
 	public int E_GhostCount { get; set; } = 0;
 
-	private void OnCollisionEnter(Collision collision)
+	private void OnTriggerEnter(Collider collision)
 	{
 		if (collision.gameObject.CompareTag("P_GHOST"))
 		{
@@ -19,7 +19,7 @@ public class Stage : MonoBehaviour
 		}
 	}
 
-	private void OnCollisionExit(Collision collision)
+	private void OnTriggerExit(Collider collision)
 	{
 		if (collision.gameObject.CompareTag("P_GHOST"))
 		{
