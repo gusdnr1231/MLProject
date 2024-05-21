@@ -5,38 +5,43 @@ using UnityEngine;
 public class GhostCamMain : MonoBehaviour
 {
 	private Stage stage;
-	public int PCount
+	public int GCount
 	{
 		get
 		{
-			return stage.P_GhostCount;
+			return stage.GhostCount;
 		}
 		private set
 		{
-			stage.P_GhostCount = value;
-		}
-	}
-	public int ECount
-	{
-		get
-		{
-			return stage.E_GhostCount;
-		}
-		private set
-		{
-			stage.E_GhostCount = value;
+			stage.GhostCount = value;
 		}
 	}
 
+	public Transform ObstacleContainer;
+	public GameObject ObstaclePrefab;
+	[HideInInspector] public List<GameObject> Obstacles = new List<GameObject>();
 
 	private void Start()
 	{
 		stage = transform.Find("Stage").GetComponent<Stage>();
-		InvokeRepeating(nameof(DebugRepeat), 1f, 5f);
 	}
 
-	private void DebugRepeat()
+	public void SettingObstacle(int count)
 	{
-		Debug.Log($"COUNT : P [{PCount}] E [{ECount}]");
+		if(Obstacles != null)
+		{
+			for(int obj = 0; obj < Obstacles.Count; obj++)
+			{
+				Destroy(Obstacles[obj]);
+			}
+			Obstacles.Clear();
+			Obstacles = new List<GameObject>();
+		}
+		for(int c = 0; c  < count; c++)
+		{
+			GameObject obstacle = Instantiate(ObstaclePrefab, ObstacleContainer);
+			obstacle.transform.localPosition = new Vector3(Random.Range(-11f, 11f), 1.5f, Random.Range(-11f, 11f));
+			Obstacles.Add(obstacle);
+		}
 	}
 }

@@ -4,30 +4,42 @@ using UnityEngine;
 
 public class Stage : MonoBehaviour
 {
-	public int P_GhostCount { get; set; } = 0;
-	public int E_GhostCount { get; set; } = 0;
+	public int GhostCount { get; set; } = 0;
+	private MeshRenderer mr;
+
+	public Material DefaultMat;
+	public Material WinMat;
+
+	private void Start()
+	{
+		mr = GetComponent<MeshRenderer>();
+	}
+
+	private void Update()
+	{
+		if(GhostCount > 0)
+		{
+			mr.material = WinMat;
+		}
+		else
+		{
+			mr.material = DefaultMat;
+		}
+	}
 
 	private void OnTriggerEnter(Collider collision)
 	{
-		if (collision.gameObject.CompareTag("P_GHOST"))
+		if (collision.gameObject.CompareTag("GHOST"))
 		{
-			P_GhostCount += 1;
-		}
-		if (collision.gameObject.CompareTag("E_GHOST"))
-		{
-			E_GhostCount += 1;
+			GhostCount += 1;
 		}
 	}
 
 	private void OnTriggerExit(Collider collision)
 	{
-		if (collision.gameObject.CompareTag("P_GHOST"))
+		if (collision.gameObject.CompareTag("GHOST"))
 		{
-			P_GhostCount -= 1;
-		}
-		if (collision.gameObject.CompareTag("E_GHOST"))
-		{
-			E_GhostCount -= 1;
+			GhostCount -= 1;
 		}
 	}
 }

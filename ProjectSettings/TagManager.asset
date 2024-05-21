@@ -17,9 +17,8 @@ TagManager:
   - RED
   - GREEN
   - BLUE
-  - P_GHOST
-  - E_GHOST
   - STAGE
+  - GHOST
   layers:
   - Default
   - TransparentFX
